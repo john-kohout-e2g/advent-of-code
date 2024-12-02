@@ -2,7 +2,8 @@ const std = @import("std");
 const yazap = @import("yazap");
 const handler = @import("lib/core/handler.zig");
 
-const allocator = std.heap.page_allocator;
+var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+const allocator = gpa.allocator();
 const log = std.log;
 const App = yazap.App;
 const Arg = yazap.Arg;
@@ -19,6 +20,8 @@ pub fn main() anyerror!void {
 
     try root_cmd.addArg(day_opt);
     try root_cmd.addArg(Arg.singleValueOption("input", 'i', "The path to the input file"));
+
+    try root_cmd.addArg(Arg.booleanOption("b-side", 'b', "The b-side or part 2 portion of the day"));
 
     const matches = try app.parseProcess();
     if (matches.containsArg("version")) {
@@ -50,6 +53,12 @@ pub fn main() anyerror!void {
     if (input.len == 0) {
         return;
     }
+    var bside = false;
 
-    try handler.handle(day, input);
+    if (matches.containsArg("b-side")) {
+        bside = true;
+        return;
+    }
+
+    try handler.handle(day, bside, input, allocator);
 }
