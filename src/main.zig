@@ -1,24 +1,64 @@
 const std = @import("std");
+const yazap = @import("yazap");
+const handler = @import("lib/core/handler.zig");
 
-pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+const allocator = gpa.allocator();
+const log = std.log;
+const App = yazap.App;
+const Arg = yazap.Arg;
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+pub fn main() anyerror!void {
+    var app = App.init(allocator, "advent-of-code", "Advent of code solution generator");
+    defer app.deinit();
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+    var root_cmd = app.rootCommand();
+    root_cmd.setProperty(.help_on_empty_args);
 
-    try bw.flush(); // don't forget to flush!
-}
+    var day_opt = Arg.singleValueOption("day", 'd', "The advent of code day to run");
+    day_opt.setValuePlaceholder("1");
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+    try root_cmd.addArg(day_opt);
+    try root_cmd.addArg(Arg.singleValueOption("input", 'i', "The path to the input file"));
+
+    try root_cmd.addArg(Arg.booleanOption("b-side", 'b', "The b-side or part 2 portion of the day"));
+
+    const matches = try app.parseProcess();
+    if (matches.containsArg("version")) {
+        log.info("v0.1.0", .{});
+        return;
+    }
+
+    const day: u32 = blk: {
+        if (matches.getSingleValue("day")) |d| {
+            const parsedDay = try std.fmt.parseInt(u32, d, 10);
+            break :blk parsedDay;
+        } else {
+            std.log.err("day is required", .{});
+            return;
+        }
+    };
+    if (day == 0) {
+        return;
+    }
+
+    const input = blk: {
+        if (matches.getSingleValue("input")) |i| {
+            break :blk i;
+        } else {
+            std.log.err("input is required", .{});
+            break :blk "";
+        }
+    };
+    if (input.len == 0) {
+        return;
+    }
+    var bside = false;
+
+    if (matches.containsArg("b-side")) {
+        bside = true;
+        return;
+    }
+
+    try handler.handle(day, bside, input, allocator);
 }
