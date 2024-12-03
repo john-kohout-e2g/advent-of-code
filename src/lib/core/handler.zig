@@ -1,5 +1,6 @@
 const std = @import("std");
 const day1Handler = @import("../day1/handler.zig");
+const day2 = @import("../day2/handler.zig");
 
 pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Allocator) !void {
     var file = try std.fs.cwd().openFile(input, .{});
@@ -14,6 +15,9 @@ pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Alloc
     switch (day) {
         1 => {
             try day1Handler.handle(buffer[0..end_index], bside, allocator);
+        },
+        2 => {
+            try day2.handle(buffer[0..end_index], bside, allocator);
         },
         else => {
             std.log.err("{d} is not a valid day", .{day});
