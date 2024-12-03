@@ -2,14 +2,6 @@ const std = @import("std");
 const day1 = @import("puzzle_lists.zig");
 
 pub fn handle(input: []u8, bside: bool, allocator: std.mem.Allocator) !void {
-    return if (bside) {
-        try handleBSide(input, allocator);
-    } else {
-        try handleASide(input, allocator);
-    };
-}
-
-fn handleASide(input: []u8, allocator: std.mem.Allocator) !void {
     var left = std.ArrayList(i32).init(allocator);
     var right = std.ArrayList(i32).init(allocator);
 
@@ -37,11 +29,8 @@ fn handleASide(input: []u8, allocator: std.mem.Allocator) !void {
         .left = left.items,
         .right = right.items,
     };
-    const total = try pl.calculateTotal();
-    std.log.info("{d}", .{total});
-    return;
-}
 
-fn handleBSide(_: []u8, _: std.mem.Allocator) !void {
+    const total: u32 = if (bside) try pl.calculateSimilarityScore() else try pl.calculateTotal();
+    std.log.info("{d}", .{total});
     return;
 }

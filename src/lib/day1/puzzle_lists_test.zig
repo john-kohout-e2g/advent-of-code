@@ -30,3 +30,17 @@ test "happy_puzzle_lists_calculate_similarity_score" {
     const similarity_score = try pl.calculateSimilarityScore();
     try expect(similarity_score == 31);
 }
+
+test "happy_puzzle_lists_calculate_similarity_score_right_smaller_than_left" {
+    var l = [_]i32{ 3, 4, 2, 3, 3, 17, 18 };
+
+    var r = [_]i32{ 1, 4, 3, 5, 3, 9, 3 };
+
+    var pl = pkg.PuzzleLists{
+        .left = &l,
+        .right = &r,
+    };
+
+    const similarity_score = try pl.calculateSimilarityScore();
+    try expect(similarity_score == 31);
+}

@@ -57,7 +57,6 @@ pub fn main() anyerror!void {
 
     if (matches.containsArg("b-side")) {
         bside = true;
-        return;
     }
 
     try handler.handle(day, bside, input, allocator);
