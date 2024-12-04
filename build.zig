@@ -25,6 +25,9 @@ pub fn build(b: *std.Build) void {
     const yazap = b.dependency("yazap", .{});
     exe.root_module.addImport("yazap", yazap.module("yazap"));
 
+    const mvzr = b.dependency("mvzr", .{});
+    exe.root_module.addImport("mvzr", mvzr.module("mvzr"));
+
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
     // step when running `zig build`).
@@ -56,15 +59,16 @@ pub fn build(b: *std.Build) void {
     // Creates a step for unit testing. This only builds the test executable
     // but does not run it.
     const lib_unit_tests = b.addTest(.{
-        .root_source_file = b.path("src/root.zig"),
+        .root_source_file = b.path("src/lib/day3/handler_test.zig"),
         .target = target,
         .optimize = optimize,
     });
+    lib_unit_tests.root_module.addImport("mvzr", mvzr.module("mvzr"));
 
     const run_lib_unit_tests = b.addRunArtifact(lib_unit_tests);
 
     const exe_unit_tests = b.addTest(.{
-        .root_source_file = b.path("src/cmd/main.zig"),
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
