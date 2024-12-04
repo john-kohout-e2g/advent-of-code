@@ -21,7 +21,7 @@ pub fn handle(input: []u8, bside: bool, allocator: std.mem.Allocator) !void {
 
     var data = d.ReactorData{ .reports = try reports.toOwnedSlice() };
 
-    const total = if (bside) 0 else data.isSafe();
+    const total = if (bside) data.reportsSafeDampened() else data.reportsSafe();
     std.log.info("{d}", .{total});
 
     return;
