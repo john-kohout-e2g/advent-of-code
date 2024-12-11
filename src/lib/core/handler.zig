@@ -3,6 +3,7 @@ const day1Handler = @import("../day1/handler.zig");
 const day2 = @import("../day2/handler.zig");
 const day3 = @import("../day3/handler.zig");
 const day4 = @import("../day4/handler.zig");
+const day5 = @import("../day5/handler.zig");
 
 pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Allocator) !void {
     var file = try std.fs.cwd().openFile(input, .{});
@@ -26,6 +27,9 @@ pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Alloc
         },
         4 => {
             try day4.handle(buffer[0..end_index], bside, allocator);
+        },
+        5 => {
+            try day5.handle(buffer[0..end_index], bside, allocator);
         },
         else => {
             std.log.err("{d} is not a valid day", .{day});
