@@ -5,6 +5,24 @@ const day3 = @import("../day3/handler.zig");
 const day4 = @import("../day4/handler.zig");
 const day5 = @import("../day5/handler.zig");
 const day6 = @import("../day6/handler.zig");
+const day7 = @import("../day7/handler.zig");
+const day8 = @import("../day8/handler.zig");
+const day9 = @import("../day9/handler.zig");
+// const day10 = @import("../day10/handler.zig");
+// const day11 = @import("../day11/handler.zig");
+// const day12 = @import("../day12/handler.zig");
+// const day13 = @import("../day13/handler.zig");
+// const day14 = @import("../day14/handler.zig");
+// const day15 = @import("../day15/handler.zig");
+// const day16 = @import("../day16/handler.zig");
+// const day17 = @import("../day17/handler.zig");
+// const day18 = @import("../day18/handler.zig");
+// const day19 = @import("../day19/handler.zig");
+// const day20 = @import("../day20/handler.zig");
+// const day21 = @import("../day21/handler.zig");
+// const day22 = @import("../day22/handler.zig");
+// const day23 = @import("../day23/handler.zig");
+// const day24 = @import("../day24/handler.zig");
 
 pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Allocator) !void {
     var file = try std.fs.cwd().openFile(input, .{});
@@ -35,15 +53,15 @@ pub fn handle(day: u32, bside: bool, input: []const u8, allocator: std.mem.Alloc
         6 => {
             try day6.handle(buffer[0..end_index], bside, allocator);
         },
-        // 7 => {
-        //     try day7.handle(buffer[0..end_index], bside, allocator);
-        // },
-        // 8 => {
-        //     try day8.handle(buffer[0..end_index], bside, allocator);
-        // },
-        // 9 => {
-        //     try day9.handle(buffer[0..end_index], bside, allocator);
-        // },
+        7 => {
+            try day7.handle(buffer[0..end_index], bside, allocator);
+        },
+        8 => {
+            try day8.handle(buffer[0..end_index], bside, allocator);
+        },
+        9 => {
+            try day9.handle(buffer[0..end_index], bside, allocator);
+        },
         // 10 => {
         //     try day10.handle(buffer[0..end_index], bside, allocator);
         // },

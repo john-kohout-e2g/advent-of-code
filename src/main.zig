@@ -9,6 +9,7 @@ const App = yazap.App;
 const Arg = yazap.Arg;
 
 pub fn main() anyerror!void {
+    var timer = try std.time.Timer.start();
     var app = App.init(allocator, "advent-of-code", "Advent of code solution generator");
     defer app.deinit();
 
@@ -60,4 +61,11 @@ pub fn main() anyerror!void {
     }
 
     try handler.handle(day, bside, input, allocator);
+
+    const elapsed = timer.read();
+    const elapsed_ms = elapsed / std.time.ns_per_ms;
+    const seconds = elapsed_ms / 1000;
+    const milliseconds = elapsed_ms % 1000;
+
+    std.log.info("Elapsed time: {d}.{d} seconds\n", .{ seconds, milliseconds });
 }
